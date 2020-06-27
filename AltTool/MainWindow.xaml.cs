@@ -1,19 +1,8 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static AltTool.ClothData;
 
 namespace AltTool
@@ -38,7 +27,6 @@ namespace AltTool
 
             clothes = new ObservableCollection<ClothData>();
             clothesListBox.ItemsSource = clothes;
-
         }
 
         public static void SetStatus(string status)
@@ -142,15 +130,17 @@ namespace AltTool
 
         private void OpenProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.CheckFileExists = true;
-            openFileDialog.Filter = "altV cloth JSON (*.altv-cloth.json)|*.altv-cloth.json";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.DefaultExt = "altv-cloth.json";
+            var openFileDialog = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                Filter = "altV cloth JSON (*.altv-cloth.json)|*.altv-cloth.json",
+                FilterIndex = 1,
+                DefaultExt = "altv-cloth.json"
+            };
 
             if (openFileDialog.ShowDialog() == true)
             {
-                foreach (string filename in openFileDialog.FileNames)
+                foreach (var filename in openFileDialog.FileNames)
                 {
                     ProjectBuilder.LoadProject(filename);
                 }
@@ -159,14 +149,16 @@ namespace AltTool
 
         private void SaveProjectButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog  = new SaveFileDialog();
-            saveFileDialog.Filter          = "altV cloth JSON (*.altv-cloth.json)|*.altv-cloth.json";
-            saveFileDialog.FilterIndex     = 1;
-            saveFileDialog.DefaultExt      = "altv-cloth.json";
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "altV cloth JSON (*.altv-cloth.json)|*.altv-cloth.json",
+                FilterIndex = 1,
+                DefaultExt = "altv-cloth.json"
+            };
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                foreach (string filename in saveFileDialog.FileNames)
+                foreach (var filename in saveFileDialog.FileNames)
                 {
                     ProjectBuilder.BuildProject(filename);
                 }

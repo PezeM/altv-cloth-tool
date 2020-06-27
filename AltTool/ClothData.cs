@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace AltTool
 {
@@ -47,8 +41,6 @@ namespace AltTool
         static string[] typeIcons = { "🧥", "👓" };
 
         public string mainPath = "";
-        string origNumerics = "";
-        string postfix = "";
 
         public ComponentFlags componentFlags;
         public PedPropFlags pedPropFlags;
@@ -58,55 +50,66 @@ namespace AltTool
 
         public Sex targetSex;
 
-        public string name = "";
+        public string Icon => sexIcons[(int)targetSex];
 
-        public string Icon
-        {
-            get
-            {
-                return sexIcons[(int)targetSex];
-            }
-        }
-
-        public string Type
-        {
-            get
-            {
-                return typeIcons[(int)clothType];
-            }
-        }
+        public string Type => typeIcons[(int)clothType];
 
         public string Name
         {
-            get
-            {
-                return name;
-            }
+            get => _name;
             set
             {
-                name = value;
+                _name = value;
                 OnPropertyChanged("Name");
             }
         }
+
+        private int _currentComponentIndex;
+        public int CurrentComponentIndex
+        {
+            get => _currentComponentIndex;
+            set
+            {
+                _currentComponentIndex = value;
+                OnPropertyChanged("CurrentComponentIndex");
+            }
+        }
+
+        private string _componentNumerics;
+        public string ComponentNumerics
+        {
+            get => _componentNumerics;
+            set
+            {
+                _componentNumerics = value;
+                OnPropertyChanged("ComponentNumerics");
+            }
+        }
+
+        public string DisplayName => $"{_name} (ID: {_currentComponentIndex}) ({_componentNumerics})";
+
+        private string _name = "";
+        readonly string _origNumerics = "";
+        readonly string _postfix = "";
 
         public ClothData()
         {
 
         }
 
-        public ClothData(string path, ClothNameResolver.Type _type, ClothNameResolver.DrawableType _drawableType, string numeric, string _postfix, Sex sex)
+        public ClothData(string path, ClothNameResolver.Type type, ClothNameResolver.DrawableType drawableType, string numeric, string postfix, Sex sex)
         {
             if (!File.Exists(path))
                 throw new Exception("YDD file not found");
 
-            clothType = _type;
-            drawableType = _drawableType;
-            origNumerics = numeric;
+            clothType = type;
+            this.drawableType = drawableType;
+            _origNumerics = numeric;
 
             targetSex = sex;
-            postfix = _postfix;
+            _postfix = postfix;
 
-            name = drawableType.ToString() + "_" + origNumerics;
+            _name = $"{this.drawableType}_{_origNumerics}";
 
             mainPath = path;
         }
@@ -133,14 +136,14 @@ namespace AltTool
             {
                 for (int i = 0; ; ++i)
                 {
-                    string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(drawableType) + "_diff_" + origNumerics + "_" + (char)(offsetLetter + i) + "_uni.ytd";
+                    string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(drawableType) + "_diff_" + _origNumerics + "_" + (char)(offsetLetter + i) + "_uni.ytd";
                     if (!File.Exists(relPath))
                         break;
                     textures.Add(relPath);
                 }
                 for (int i = 0; ; ++i)
                 {
-                    string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(drawableType) + "_diff_" + origNumerics + "_" + (char)(offsetLetter + i) + "_whi.ytd";
+                    string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(drawableType) + "_diff_" + _origNumerics + "_" + (char)(offsetLetter + i) + "_whi.ytd";
                     if (!File.Exists(relPath))
                         break;
                     textures.Add(relPath);
@@ -150,7 +153,7 @@ namespace AltTool
             {
                 for (int i = 0; ; ++i)
                 {
-                    string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(drawableType) + "_diff_" + origNumerics + "_" + (char)(offsetLetter + i) + ".ytd";
+                    string relPath = rootPath + "\\" + ClothNameResolver.DrawableTypeToString(drawableType) + "_diff_" + _origNumerics + "_" + (char)(offsetLetter + i) + ".ytd";
                     if (!File.Exists(relPath))
                         break;
                     textures.Add(relPath);
@@ -166,7 +169,7 @@ namespace AltTool
 
         public override string ToString()
         {
-            return sexIcons[(int)targetSex] + " " + name;
+            return sexIcons[(int)targetSex] + " " + _name;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -177,24 +180,11 @@ namespace AltTool
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public bool IsComponent()
-        {
-            if (drawableType <= ClothNameResolver.DrawableType.Top)
-                return true;
-            return false;
-        }
+        public bool IsComponent() => drawableType <= ClothNameResolver.DrawableType.Top;
 
-        public byte GetComponentTypeID()
-        {
-            if(IsComponent())
-                return (byte)drawableType;
-            return 255;
-        }
+        public byte GetComponentTypeID() => IsComponent() ? (byte) drawableType : (byte) 255;
 
-        public bool IsPedProp()
-        {
-            return !IsComponent();
-        }
+        public bool IsPedProp() => !IsComponent();
 
         public byte GetPedPropTypeID()
         {
@@ -203,9 +193,12 @@ namespace AltTool
             return 255;
         }
 
-        public string GetPrefix()
+        public string GetPrefix() => ClothNameResolver.DrawableTypeToString(drawableType);
+
+        public void SetComponentNumerics(string componentNumerics, int currentComponentIndex)
         {
-            return ClothNameResolver.DrawableTypeToString(drawableType);
+            ComponentNumerics = componentNumerics;
+            CurrentComponentIndex = currentComponentIndex;
         }
     }
 }

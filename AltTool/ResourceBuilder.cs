@@ -4,12 +4,9 @@ using RageLib.GTA5.ArchiveWrappers;
 using RageLib.GTA5.ResourceWrappers.PC.Meta.Structures;
 using RageLib.Resources.GTA5.PC.GameFiles;
 using RageLib.Resources.GTA5.PC.Meta;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using static AltTool.ClothData;
 
@@ -262,7 +259,6 @@ namespace AltTool
                 {
                     if (cd.IsComponent())
                     {
-
                         byte componentTypeID = cd.GetComponentTypeID();
 
                         if (cd.textures.Count > 0 && (int)cd.targetSex == sexNr)
@@ -352,6 +348,7 @@ namespace AltTool
                             string componentNumerics = currentComponentIndex.ToString().PadLeft(3, '0');
                             string prefix = cd.GetPrefix();
 
+                            cd.SetComponentNumerics(componentNumerics, currentComponentIndex);
                             File.Copy(cd.mainPath, outputFolder + "\\stream\\" + folderNames[sexNr] + ".rpf\\" + prefixes[sexNr] + "freemode_01_" + prefixes[sexNr] + collectionName + "\\" + prefix + "_" + componentNumerics + "_" + postfix + ".ydd");
 
                             char offsetLetter = 'a';
@@ -417,6 +414,7 @@ namespace AltTool
                             string prefix = cd.GetPrefix();
 
                             var ydr = new YdrFile();
+                            cd.SetComponentNumerics(componentNumerics, currentPropIndex);
 
                             File.Copy(cd.mainPath, outputFolder + "\\stream\\" + folderNames[sexNr] + "_p.rpf\\" + prefixes[sexNr] + "freemode_01_p_" + prefixes[sexNr] + collectionName + "\\" + prefix + "_" + componentNumerics + ".ydd", true);
 
@@ -432,7 +430,6 @@ namespace AltTool
 
                 if (isAnyClothAdded)
                 {
-
                     int arrIndex = 0;
                     for (int i = 0; i < componentTextureBindings.Length; ++i)
                     {
@@ -458,7 +455,6 @@ namespace AltTool
                     ymt.Save(outputFolder + "\\stream\\" + folderNames[sexNr] + ".rpf\\" + prefixes[sexNr] + "freemode_01_" + prefixes[sexNr] + collectionName + ".ymt");
                     streamCfgIncludes.Add("stream/" + folderNames[sexNr] + ".rpf");
                 }
-
             }
 
             File.WriteAllText(outputFolder + "\\stream.cfg", GenerateStreamCfg(streamCfgIncludes, streamCfgMetas));

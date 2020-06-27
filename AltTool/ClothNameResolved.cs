@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AltTool
 {
@@ -42,18 +38,18 @@ namespace AltTool
             PropRFoot,
             PropUnk1,
             PropUnk2,
-            COUNT
         }
 
         public Type clothType;
         public DrawableType drawableType;
         public string bindedNumber = "";
         public string postfix = "";
-        public bool isVariation = false;
+        public bool isVariation;
+
         public ClothNameResolver(string filename)
         {
-            string[] parts = Path.GetFileNameWithoutExtension(filename).Split('_');
-            if (parts.Length < 3)
+            var parts = Path.GetFileNameWithoutExtension(filename)?.Split('_');
+            if (parts == null || parts.Length < 3)
                 throw new Exception("Wrong drawable name");
 
             if(parts[0].ToLower() == "p")
@@ -112,7 +108,7 @@ namespace AltTool
 
         public override string ToString()
         {
-            return clothType.ToString() + " " + drawableType.ToString() + " " + bindedNumber;
+            return clothType + " " + drawableType + " " + bindedNumber;
         }
 
         public static string DrawableTypeToString(DrawableType type)

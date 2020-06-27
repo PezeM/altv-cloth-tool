@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AltTool
+﻿namespace AltTool
 {
     class StatusController
     {
-
         public static void SetStatus(string status)
         {
             MainWindow.SetStatus(status);
