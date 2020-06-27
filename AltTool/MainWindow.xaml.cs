@@ -68,7 +68,7 @@ namespace AltTool
                 }
 
                 selectedCloth = null;
-                editGroupBox.Visibility = Visibility.Hidden;
+                editGroupBox.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -82,6 +82,7 @@ namespace AltTool
                 {
                     clothEditWindow.Visibility = Visibility.Collapsed;
                     pedPropEditWindow.Visibility = Visibility.Collapsed;
+                    editGroupBox.Visibility = Visibility.Visible;
 
                     if (selectedCloth.IsComponent())
                     {

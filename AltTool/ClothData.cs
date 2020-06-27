@@ -60,7 +60,7 @@ namespace AltTool
             set
             {
                 _name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged("DisplayName");
             }
         }
 
@@ -71,7 +71,7 @@ namespace AltTool
             set
             {
                 _currentComponentIndex = value;
-                OnPropertyChanged("CurrentComponentIndex");
+                OnPropertyChanged("DisplayName");
             }
         }
 
@@ -82,11 +82,11 @@ namespace AltTool
             set
             {
                 _componentNumerics = value;
-                OnPropertyChanged("ComponentNumerics");
+                OnPropertyChanged("DisplayName");
             }
         }
 
-        public string DisplayName => $"{_name} (ID: {_currentComponentIndex}) ({_componentNumerics})";
+        public string DisplayName => $"{Name} (ID: {CurrentComponentIndex}) ({ComponentNumerics})";
 
         private string _name = "";
         readonly string _origNumerics = "";
