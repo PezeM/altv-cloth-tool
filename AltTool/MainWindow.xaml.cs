@@ -74,12 +74,9 @@ namespace AltTool
 
                 clothes.Clear();
 
-                foreach(var cloth in _clothes)
+                foreach (var cloth in _clothes.Where(cloth => cloth != selectedCloth))
                 {
-                    if(cloth != selectedCloth)
-                    {
-                        clothes.Add(cloth);
-                    }
+                    clothes.Add(cloth);
                 }
 
                 selectedCloth = null;

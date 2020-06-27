@@ -116,10 +116,7 @@ namespace AltTool
             string rootPath = Path.GetDirectoryName(mainPath);
             string fileName = Path.GetFileNameWithoutExtension(mainPath);
             string relPath = rootPath + "\\" + fileName + "_1.ydd";
-            if (File.Exists(relPath))
-                fpModelPath = relPath;
-            else
-                fpModelPath = "";
+            fpModelPath = File.Exists(relPath) ? relPath : "";
         }
 
         public void SetFPModel(string path)
@@ -177,10 +174,7 @@ namespace AltTool
         void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public bool IsComponent()

@@ -19,14 +19,13 @@ namespace AltTool
 
         public static void LoadProject(string inputFile)
         {
-            string dir = Path.GetDirectoryName(inputFile);
             var data = JsonConvert.DeserializeObject<List<ClothData>>(File.ReadAllText(inputFile));
 
             MainWindow.clothes.Clear();
 
-            var _clothes = data.OrderBy(x => x.Name, new AlphanumericComparer()).ToList();
+            var clothes = data.OrderBy(x => x.Name, new AlphanumericComparer()).ToList();
 
-            foreach (var cd in _clothes)
+            foreach (var cd in clothes)
             {
                 MainWindow.clothes.Add(cd);
             }
